@@ -1,11 +1,21 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Building2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useAuth } from "@/lib/auth-context";
 import { getSession, homeForRole, type AuthRole } from "@/lib/auth-session";
+
+const loginSchema = z.object({
+  email: z.string().trim().min(1, "Enter your email to continue.").email("Enter a valid email address."),
+  password: z.string().min(1, "Enter your password to continue."),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -31,26 +41,18 @@ export const Route = createFileRoute("/")({
 function LoginPage() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [pendingRole, setPendingRole] = useState<AuthRole | null>(null);
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
 
-  function submit(role: AuthRole) {
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail || !password) {
-      setError("Enter your email and password to continue.");
-      return;
-    }
-
-    setError(null);
-    setPendingRole(role);
-    signIn(trimmedEmail, role);
-    void navigate({ to: homeForRole(role) });
-  }
-
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function submitAs(role: AuthRole) {
+    return form.handleSubmit((values) => {
+      setPendingRole(role);
+      signIn(values.email.trim(), role);
+      void navigate({ to: homeForRole(role) });
+    });
   }
 
   return (
@@ -124,73 +126,77 @@ function LoginPage() {
               Enter your credentials, then choose the workspace for your role.
             </p>
 
-            <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
+            <Form {...form}>
+              <form className="mt-8 space-y-5" onSubmit={(e) => e.preventDefault()} noValidate>
+                <FormField
+                  control={form.control}
                   name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (error) setError(null);
-                  }}
-                  aria-invalid={Boolean(error)}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          autoComplete="email"
+                          placeholder="you@company.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
+                <FormField
+                  control={form.control}
                   name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (error) setError(null);
-                  }}
-                  aria-invalid={Boolean(error)}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          autoComplete="current-password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {error ? (
-                <p className="text-center text-sm text-destructive" role="alert">
-                  {error}
+                <p className="text-center text-xs text-muted-foreground">
+                  Demo mode — any email &amp; password will sign you in.
                 </p>
-              ) : null}
 
-              <div className="space-y-3 pt-1">
-                <Button
-                  type="button"
-                  className="h-11 w-full"
-                  disabled={pendingRole !== null}
-                  onClick={() => submit("admin")}
-                >
-                  <Shield />
-                  {pendingRole === "admin" ? "Signing in…" : "Sign in as Admin"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-11 w-full"
-                  disabled={pendingRole !== null}
-                  onClick={() => submit("vendor")}
-                >
-                  <Building2 />
-                  {pendingRole === "vendor" ? "Signing in…" : "Sign in as Vendor"}
-                </Button>
-              </div>
+                <div className="space-y-3 pt-1">
+                  <Button
+                    type="button"
+                    className="h-11 w-full"
+                    disabled={pendingRole !== null}
+                    onClick={submitAs("admin")}
+                  >
+                    <Shield />
+                    {pendingRole === "admin" ? "Signing in…" : "Sign in as Admin"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 w-full"
+                    disabled={pendingRole !== null}
+                    onClick={submitAs("vendor")}
+                  >
+                    <Building2 />
+                    {pendingRole === "vendor" ? "Signing in…" : "Sign in as Vendor"}
+                  </Button>
+                </div>
 
-              <p className="text-center text-xs text-muted-foreground">
-                &copy; 2026 Nexus. All rights reserved.
-              </p>
-            </form>
+                <p className="text-center text-xs text-muted-foreground">
+                  &copy; 2026 Nexus. All rights reserved.
+                </p>
+              </form>
+            </Form>
           </div>
         </div>
       </main>
