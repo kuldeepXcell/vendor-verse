@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   Download,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell, StatusPill } from "@/components/app-shell";
 import { requireAuth } from "@/lib/auth-guards";
@@ -37,7 +38,7 @@ export const Route = createFileRoute("/dashboard")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Dashboard — Nexus Portal" },
+      { title: "Dashboard — Vendor Verse" },
       {
         name: "description",
         content: "Admin overview: vendors, purchase orders, invoices, and payables.",
@@ -103,19 +104,53 @@ function Dashboard() {
               { name: "description", label: "Description", placeholder: "Brief description" },
             ]}
             submitLabel="Create PO"
-            onSubmit={(v) => createPurchaseOrder(v as { vendor: string; value: string; delivery: string; description: string })}
+            onSubmit={(v) =>
+              createPurchaseOrder(
+                v as { vendor: string; value: string; delivery: string; description: string },
+              )
+            }
           />
         </>
       }
     >
       {/* KPI row */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {([
-          { label: "Active vendors", value: activeVendors, delta: "+12", trend: "up" as const, icon: Users, sub: "8 pending onboarding" },
-          { label: "Open purchase orders", value: openPOs, delta: "+4", trend: "up" as const, icon: FileText, sub: "$1.24M committed" },
-          { label: "Invoices to review", value: invoicesToReview, delta: "-3", trend: "down" as const, icon: Receipt, sub: "4 overdue for approval" },
-          { label: "Payables this week", value: "$284,910", delta: "+6.2%", trend: "up" as const, icon: Wallet, sub: "Next run · Friday" },
-        ] as const).map((kpi, idx) => (
+        {(
+          [
+            {
+              label: "Active vendors",
+              value: activeVendors,
+              delta: "+12",
+              trend: "up" as const,
+              icon: Users,
+              sub: `${onboardingCount} pending onboarding`,
+            },
+            {
+              label: "Open purchase orders",
+              value: openPOs,
+              delta: "+4",
+              trend: "up" as const,
+              icon: FileText,
+              sub: "$1.24M committed",
+            },
+            {
+              label: "Invoices to review",
+              value: invoicesToReview,
+              delta: "-3",
+              trend: "down" as const,
+              icon: Receipt,
+              sub: "4 overdue for approval",
+            },
+            {
+              label: "Payables this week",
+              value: "$284,910",
+              delta: "+6.2%",
+              trend: "up" as const,
+              icon: Wallet,
+              sub: "Next run · Friday",
+            },
+          ] as const
+        ).map((kpi, idx) => (
           <FadeIn key={kpi.label} delay={idx * 80}>
             <Kpi
               label={kpi.label}
@@ -175,7 +210,12 @@ function Dashboard() {
             {[
               { name: "Orbit Logistics", stage: "KYC review", pct: 75, tone: "info" as const },
               { name: "Kenji Metals", stage: "Contract sent", pct: 55, tone: "warning" as const },
-              { name: "Northwind Textiles", stage: "Docs pending", pct: 25, tone: "muted" as const },
+              {
+                name: "Northwind Textiles",
+                stage: "Docs pending",
+                pct: 25,
+                tone: "muted" as const,
+              },
               { name: "Halcyon Print Co.", stage: "Approved", pct: 100, tone: "success" as const },
             ].map((v, idx) => (
               <li key={v.name}>
@@ -290,7 +330,9 @@ function Dashboard() {
               <li
                 key={d.name}
                 className="flex cursor-pointer items-center gap-4 py-3 first:pt-0 last:pb-0"
-                onClick={() => toast.info(d.name, { description: `${d.vendor} · Expires ${d.date}` })}
+                onClick={() =>
+                  toast.info(d.name, { description: `${d.vendor} · Expires ${d.date}` })
+                }
               >
                 <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-secondary-foreground">
                   <FileText className="h-4 w-4" />
@@ -338,9 +380,7 @@ function Dashboard() {
                   <div className="text-right">
                     <div className="text-sm font-semibold tabular-nums">{v.spend}</div>
                     <div
-                      className={
-                        "text-[11px] " + (v.up ? "text-success" : "text-muted-foreground")
-                      }
+                      className={"text-[11px] " + (v.up ? "text-success" : "text-muted-foreground")}
                     >
                       {v.up ? "▲" : "▼"} {v.change}
                     </div>
@@ -368,7 +408,7 @@ function Kpi({
   value: string | number;
   delta: string;
   trend: "up" | "down";
-  icon: any;
+  icon: LucideIcon;
   sub: string;
 }) {
   return (
@@ -413,8 +453,18 @@ function LegendDot({ className, label }: { className: string; label: string }) {
 
 function Chart() {
   const weeks: [number, number, number][] = [
-    [60, 20, 8], [45, 30, 12], [70, 25, 5], [55, 40, 15], [80, 30, 10], [65, 45, 20],
-    [90, 25, 12], [75, 55, 18], [60, 35, 8], [85, 50, 22], [70, 40, 15], [95, 60, 25],
+    [60, 20, 8],
+    [45, 30, 12],
+    [70, 25, 5],
+    [55, 40, 15],
+    [80, 30, 10],
+    [65, 45, 20],
+    [90, 25, 12],
+    [75, 55, 18],
+    [60, 35, 8],
+    [85, 50, 22],
+    [70, 40, 15],
+    [95, 60, 25],
   ];
   const max = 180;
   return (
@@ -425,8 +475,10 @@ function Chart() {
         ))}
       </div>
       <div className="mt-3 grid grid-cols-12 gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-        {["W1","W2","W3","W4","W5","W6","W7","W8","W9","W10","W11","W12"].map((w) => (
-          <div key={w} className="text-center">{w}</div>
+        {["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12"].map((w) => (
+          <div key={w} className="text-center">
+            {w}
+          </div>
         ))}
       </div>
     </div>
@@ -434,23 +486,94 @@ function Chart() {
 }
 
 const activity = [
-  { title: "Invoice INV-8842 approved", meta: "Ava K. · 4 min ago", icon: CheckCircle2, dot: "bg-success" },
-  { title: "PO-24817 sent to Aster", meta: "Automated · 12 min ago", icon: FileText, dot: "bg-primary" },
-  { title: "COI expiring — Kenji Metals", meta: "Compliance · 1h ago", icon: AlertTriangle, dot: "bg-warning" },
+  {
+    title: "Invoice INV-8842 approved",
+    meta: "Ava K. · 4 min ago",
+    icon: CheckCircle2,
+    dot: "bg-success",
+  },
+  {
+    title: "PO-24817 sent to Aster",
+    meta: "Automated · 12 min ago",
+    icon: FileText,
+    dot: "bg-primary",
+  },
+  {
+    title: "COI expiring — Kenji Metals",
+    meta: "Compliance · 1h ago",
+    icon: AlertTriangle,
+    dot: "bg-warning",
+  },
   { title: "Payment run scheduled", meta: "Finance · 3h ago", icon: Wallet, dot: "bg-accent" },
   { title: "New vendor Orbit onboarded", meta: "Yesterday", icon: Users, dot: "bg-primary" },
 ];
 
 const docs = [
-  { name: "Certificate of Insurance", vendor: "Aster Manufacturing", date: "Aug 24", tone: "warning" as const, label: "8 days" },
-  { name: "W-9 Tax Form", vendor: "Halcyon Print Co.", date: "Aug 30", tone: "info" as const, label: "14 days" },
-  { name: "ISO 9001 Certification", vendor: "Kenji Metals", date: "Sep 06", tone: "muted" as const, label: "21 days" },
-  { name: "MSA — v3.1", vendor: "Orbit Logistics", date: "Aug 18", tone: "destructive" as const, label: "Overdue" },
+  {
+    name: "Certificate of Insurance",
+    vendor: "Aster Manufacturing",
+    date: "Aug 24",
+    tone: "warning" as const,
+    label: "8 days",
+  },
+  {
+    name: "W-9 Tax Form",
+    vendor: "Halcyon Print Co.",
+    date: "Aug 30",
+    tone: "info" as const,
+    label: "14 days",
+  },
+  {
+    name: "ISO 9001 Certification",
+    vendor: "Kenji Metals",
+    date: "Sep 06",
+    tone: "muted" as const,
+    label: "21 days",
+  },
+  {
+    name: "MSA — v3.1",
+    vendor: "Orbit Logistics",
+    date: "Aug 18",
+    tone: "destructive" as const,
+    label: "Overdue",
+  },
 ];
 
 const topVendors = [
-  { name: "Aster Manufacturing", initial: "AM", category: "Components", spend: "$412,880", change: "8.2%", up: true, share: 92 },
-  { name: "Kenji Metals", initial: "KM", category: "Raw materials", spend: "$298,410", change: "3.4%", up: true, share: 68 },
-  { name: "Orbit Logistics", initial: "OL", category: "Freight & 3PL", spend: "$184,200", change: "1.1%", up: false, share: 44 },
-  { name: "Halcyon Print Co.", initial: "HP", category: "Packaging", spend: "$96,540", change: "5.6%", up: true, share: 26 },
+  {
+    name: "Aster Manufacturing",
+    initial: "AM",
+    category: "Components",
+    spend: "$412,880",
+    change: "8.2%",
+    up: true,
+    share: 92,
+  },
+  {
+    name: "Kenji Metals",
+    initial: "KM",
+    category: "Raw materials",
+    spend: "$298,410",
+    change: "3.4%",
+    up: true,
+    share: 68,
+  },
+  {
+    name: "Orbit Logistics",
+    initial: "OL",
+    category: "Freight & 3PL",
+    spend: "$184,200",
+    change: "1.1%",
+    up: false,
+    share: 44,
+  },
+  {
+    name: "Halcyon Print Co.",
+    initial: "HP",
+    category: "Packaging",
+    spend: "$96,540",
+    change: "5.6%",
+    up: true,
+    share: 26,
+  },
 ];

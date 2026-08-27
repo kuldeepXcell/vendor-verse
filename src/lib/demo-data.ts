@@ -530,7 +530,7 @@ export const vendorPayments: VendorPayment[] = [
   {
     id: "PAY-4412",
     date: "Aug 22, 2026",
-    method: "ACH · Chase •• 4821",
+    method: "ACH · Northlake •• 4821",
     invoice: "INV-8830",
     amount: "$32,400",
     status: "Scheduled",
@@ -539,7 +539,7 @@ export const vendorPayments: VendorPayment[] = [
   {
     id: "PAY-4398",
     date: "Aug 08, 2026",
-    method: "ACH · Chase •• 4821",
+    method: "ACH · Northlake •• 4821",
     invoice: "INV-8821",
     amount: "$18,600",
     status: "Paid",
@@ -548,7 +548,7 @@ export const vendorPayments: VendorPayment[] = [
   {
     id: "PAY-4371",
     date: "Jul 25, 2026",
-    method: "Wire · HSBC •• 9903",
+    method: "Wire · Continental •• 9903",
     invoice: "INV-8790",
     amount: "$41,200",
     status: "Paid",
@@ -613,6 +613,9 @@ export const vendorOnboardingSteps = [
   { label: "Master service agreement", done: true },
 ];
 
-export function filterByVendor<T extends { vendor: string }>(rows: T[], vendor = DEMO_VENDOR_NAME): T[] {
+export function filterByVendor<T extends { vendor: string }>(
+  rows: T[],
+  vendor = DEMO_VENDOR_NAME,
+): T[] {
   return rows.filter((row) => row.vendor === vendor);
 }

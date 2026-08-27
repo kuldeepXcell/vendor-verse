@@ -19,11 +19,11 @@ Add a professional login entry screen that matches the existing Slate & Steel th
 
 ## Routing
 
-| Route | Purpose |
-|-------|---------|
-| `/` | Login split-panel. If session exists, redirect to role home |
-| `/dashboard` | Admin Overview (current index content) |
-| `/vendor` | Vendor home (unchanged) |
+| Route        | Purpose                                                     |
+| ------------ | ----------------------------------------------------------- |
+| `/`          | Login split-panel. If session exists, redirect to role home |
+| `/dashboard` | Admin Overview (current index content)                      |
+| `/vendor`    | Vendor home (unchanged)                                     |
 
 Soft session guard:
 

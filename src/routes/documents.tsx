@@ -1,11 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  FileText,
-  FileSpreadsheet,
-  FileImage,
-  FileArchive,
-  type LucideIcon,
-} from "lucide-react";
+import { FileText, FileSpreadsheet, FileImage, FileArchive, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell, StatusPill } from "@/components/app-shell";
 import { requireAuth } from "@/lib/auth-guards";
@@ -19,7 +13,7 @@ export const Route = createFileRoute("/documents")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Documents — Nexus Portal" },
+      { title: "Documents — Vendor Verse" },
       {
         name: "description",
         content: "Central vault for contracts, certifications, and vendor documents.",
@@ -29,10 +23,7 @@ export const Route = createFileRoute("/documents")({
   component: DocumentsPage,
 });
 
-const groupMeta: Record<
-  DocumentItem["group"],
-  { icon: LucideIcon }
-> = {
+const groupMeta: Record<DocumentItem["group"], { icon: LucideIcon }> = {
   "Contracts & MSAs": { icon: FileText },
   Compliance: { icon: FileArchive },
   "Tax & Banking": { icon: FileSpreadsheet },
@@ -79,9 +70,7 @@ function DocumentsPage() {
                 </div>
                 <div>
                   <div className="font-display font-semibold">{g.label}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {g.items.length} documents
-                  </div>
+                  <div className="text-xs text-muted-foreground">{g.items.length} documents</div>
                 </div>
               </div>
               <ul className="divide-y divide-border">

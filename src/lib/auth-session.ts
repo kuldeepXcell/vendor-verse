@@ -8,17 +8,14 @@ export type AuthSession = {
   role: AuthRole;
 };
 
-const SESSION_KEY = "nexus.session";
+const SESSION_KEY = "vendorverse.session";
 const COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 7;
 
 function parseSession(raw: string | null | undefined): AuthSession | null {
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as Partial<AuthSession>;
-    if (
-      typeof parsed.email !== "string" ||
-      (parsed.role !== "admin" && parsed.role !== "vendor")
-    ) {
+    if (typeof parsed.email !== "string" || (parsed.role !== "admin" && parsed.role !== "vendor")) {
       return null;
     }
     return { email: parsed.email, role: parsed.role };
@@ -27,10 +24,7 @@ function parseSession(raw: string | null | undefined): AuthSession | null {
   }
 }
 
-function readCookieValue(
-  cookieHeader: string | null | undefined,
-  name: string,
-): string | null {
+function readCookieValue(cookieHeader: string | null | undefined, name: string): string | null {
   if (!cookieHeader) return null;
   for (const part of cookieHeader.split(/;\s*/)) {
     const eq = part.indexOf("=");

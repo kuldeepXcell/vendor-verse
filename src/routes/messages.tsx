@@ -14,7 +14,7 @@ export const Route = createFileRoute("/messages")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Messages — Nexus Portal" },
+      { title: "Messages — Vendor Verse" },
       { name: "description", content: "Communicate with vendors directly from the portal." },
     ],
   }),
@@ -99,7 +99,12 @@ function MessagesPage() {
                     <span className="text-[11px] text-muted-foreground">{t.time}</span>
                   </div>
                   <div className="mt-0.5 flex items-center gap-2">
-                    <p className={"truncate text-xs " + (t.unread ? "text-foreground" : "text-muted-foreground")}>
+                    <p
+                      className={
+                        "truncate text-xs " +
+                        (t.unread ? "text-foreground" : "text-muted-foreground")
+                      }
+                    >
                       {t.last}
                     </p>
                     {t.unread && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-info" />}
@@ -117,7 +122,9 @@ function MessagesPage() {
                 {selectedThread?.initial ?? "?"}
               </div>
               <div>
-                <div className="font-display font-semibold">{selectedThread?.name ?? "Select a thread"}</div>
+                <div className="font-display font-semibold">
+                  {selectedThread?.name ?? "Select a thread"}
+                </div>
                 <div className="text-xs text-muted-foreground">3 participants</div>
               </div>
             </div>
@@ -141,7 +148,19 @@ function MessagesPage() {
                 successLabel="File attached"
                 onFiles={(files) => uploadDocument(files[0]!.name)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                </svg>
               </FileUploadButton>
               <Input
                 placeholder={`Message ${selectedThread?.name ?? ""}`.trim()}
@@ -161,18 +180,33 @@ function MessagesPage() {
   );
 }
 
-function Bubble({ side, name, children }: { side: "me" | "them"; name: string; children: ReactNode }) {
+function Bubble({
+  side,
+  name,
+  children,
+}: {
+  side: "me" | "them";
+  name: string;
+  children: ReactNode;
+}) {
   const mine = side === "me";
   return (
     <div className={mine ? "flex justify-end" : "flex justify-start"}>
       <div className="max-w-[75%]">
-        <div className={"mb-1 text-[11px] " + (mine ? "text-right text-muted-foreground" : "text-muted-foreground")}>
+        <div
+          className={
+            "mb-1 text-[11px] " +
+            (mine ? "text-right text-muted-foreground" : "text-muted-foreground")
+          }
+        >
           {name}
         </div>
         <div
           className={
             "rounded-2xl px-4 py-2.5 text-sm shadow-sm " +
-            (mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card text-card-foreground rounded-bl-sm border border-border")
+            (mine
+              ? "bg-primary text-primary-foreground rounded-br-sm"
+              : "bg-card text-card-foreground rounded-bl-sm border border-border")
           }
         >
           {children}

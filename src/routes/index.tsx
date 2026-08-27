@@ -6,12 +6,23 @@ import { z } from "zod";
 import { Building2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useAuth } from "@/lib/auth-context";
 import { getSession, homeForRole, type AuthRole } from "@/lib/auth-session";
 
 const loginSchema = z.object({
-  email: z.string().trim().min(1, "Enter your email to continue.").email("Enter a valid email address."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Enter your email to continue.")
+    .email("Enter a valid email address."),
   password: z.string().min(1, "Enter your password to continue."),
 });
 
@@ -27,11 +38,11 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Sign in — Nexus Portal" },
+      { title: "Sign in — Vendor Verse" },
       {
         name: "description",
         content:
-          "Sign in to Nexus as an admin or vendor to manage procurement and vendor operations.",
+          "Sign in to Vendor Verse as an admin or vendor to manage procurement and vendor operations.",
       },
     ],
   }),
@@ -69,13 +80,13 @@ function LoginPage() {
           <div className="flex items-center gap-3">
             <img
               src="/logo-animated.svg"
-              alt="Nexus"
+              alt="Vendor Verse"
               className="h-11 w-11 shrink-0 rounded-lg"
               width={44}
               height={44}
             />
             <div>
-              <div className="font-display text-lg font-bold tracking-tight">Nexus</div>
+              <div className="font-display text-lg font-bold tracking-tight">Vendor Verse</div>
               <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">
                 Vendor Portal
               </div>
@@ -103,13 +114,13 @@ function LoginPage() {
         <div className="flex items-center gap-3 border-b border-border px-6 py-4 lg:hidden">
           <img
             src="/logo-animated.svg"
-            alt="Nexus"
+            alt="Vendor Verse"
             className="h-9 w-9 shrink-0 rounded-lg"
             width={36}
             height={36}
           />
           <div>
-            <div className="font-display text-sm font-bold tracking-tight">Nexus</div>
+            <div className="font-display text-sm font-bold tracking-tight">Vendor Verse</div>
             <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
               Vendor Portal
             </div>
@@ -193,7 +204,7 @@ function LoginPage() {
                 </div>
 
                 <p className="text-center text-xs text-muted-foreground">
-                  &copy; 2026 Nexus. All rights reserved.
+                  &copy; 2026 Vendor Verse. All rights reserved.
                 </p>
               </form>
             </Form>

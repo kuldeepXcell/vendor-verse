@@ -12,11 +12,7 @@ type UseFilePickerOptions = {
   onPick: (files: PickedFile[]) => void;
 };
 
-export function useFilePicker({
-  accept = "*/*",
-  multiple = false,
-  onPick,
-}: UseFilePickerOptions) {
+export function useFilePicker({ accept = "*/*", multiple = false, onPick }: UseFilePickerOptions) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const open = useCallback(() => {

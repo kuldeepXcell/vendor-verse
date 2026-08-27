@@ -12,7 +12,7 @@ dist
 dist-ssr
 .output
 .vinxi
-.tanstack/**
+.tanstack/
 .nitro
 .vercel
 *.local
@@ -40,3 +40,15 @@ dist-ssr
 # Packaged deliverables and generator scratch
 deliverables/
 .cache/
+
+# Build caches
+.vite/
+.turbo/
+*.tsbuildinfo
+.eslintcache
+coverage/
+
+# Local agent/editor scratch
+.claude/
+CLAUDE.local.md
+Thumbs.db

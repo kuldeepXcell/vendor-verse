@@ -1,9 +1,16 @@
 {
   "name": "vendor-verse",
+  "version": "1.0.0",
+  "description": "Vendor Verse — a frontend-only vendor management portal template with paired admin and vendor workspaces.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "packageManager": "pnpm@10.34.1",
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=10"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -11,6 +18,7 @@
     "preview": "vite preview",
     "start": "node .output/server/index.mjs",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write ."
   },
   "dependencies": {

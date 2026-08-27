@@ -10,11 +10,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { AppShell, StatusPill } from "@/components/app-shell";
-import {
-  DEMO_VENDOR_NAME,
-  filterByVendor,
-  vendorPayments,
-} from "@/lib/demo-data";
+import { DEMO_VENDOR_NAME, filterByVendor, vendorPayments } from "@/lib/demo-data";
 import { useDemoStore } from "@/lib/demo-store";
 import { FileUploadButton } from "@/components/file-upload-button";
 import { Button } from "@/components/ui/button";
@@ -26,7 +22,7 @@ export const Route = createFileRoute("/vendor/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Vendor Home — Nexus Portal" },
+      { title: "Vendor Home — Vendor Verse" },
       {
         name: "description",
         content: "Vendor-facing home: your POs, invoices, documents, and payments.",

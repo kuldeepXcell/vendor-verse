@@ -76,11 +76,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nexus — Vendor Portal" },
-      { name: "description", content: "A centralized portal for vendor onboarding, purchase orders, invoices, documents, and payments." },
-      { name: "author", content: "Nexus" },
-      { property: "og:title", content: "Nexus — Vendor Portal" },
-      { property: "og:description", content: "A centralized portal for vendor onboarding, purchase orders, invoices, documents, and payments." },
+      { title: "Vendor Verse — Vendor Portal" },
+      {
+        name: "description",
+        content:
+          "A centralized portal for vendor onboarding, purchase orders, invoices, documents, and payments.",
+      },
+      { name: "author", content: "Vendor Verse" },
+      { property: "og:title", content: "Vendor Verse — Vendor Portal" },
+      {
+        property: "og:description",
+        content:
+          "A centralized portal for vendor onboarding, purchase orders, invoices, documents, and payments.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

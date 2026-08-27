@@ -6,7 +6,12 @@ import { useDemoStore } from "@/lib/demo-store";
 import { filterByVendor } from "@/lib/demo-data";
 import { FileUploadButton } from "@/components/file-upload-button";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { FadeIn } from "@/components/motion";
@@ -15,7 +20,7 @@ export const Route = createFileRoute("/vendor/invoices")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "My Invoices — Nexus Portal" }],
+    meta: [{ title: "My Invoices — Vendor Verse" }],
   }),
   component: VendorInvoicesPage,
 });
@@ -48,7 +53,8 @@ function VendorInvoicesPage() {
       <FadeIn>
         <div className="mb-4 flex items-center gap-4">
           <div className="text-sm text-muted-foreground">
-            <AnimatedCounter value={myInvoices.length} className="font-semibold text-foreground" /> invoices
+            <AnimatedCounter value={myInvoices.length} className="font-semibold text-foreground" />{" "}
+            invoices
           </div>
         </div>
       </FadeIn>
@@ -75,13 +81,19 @@ function VendorInvoicesPage() {
                   onClick={() => handleRowClick(inv)}
                 >
                   <TableCell className="font-mono text-xs">{inv.id}</TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{inv.po}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {inv.po}
+                  </TableCell>
                   <TableCell className="tabular-nums font-medium">{inv.value}</TableCell>
                   <TableCell className="text-muted-foreground">{inv.due}</TableCell>
                   <TableCell className="text-xs">
-                    <span className={inv.match.includes("✕") ? "text-destructive" : "text-success"}>{inv.match}</span>
+                    <span className={inv.match.includes("✕") ? "text-destructive" : "text-success"}>
+                      {inv.match}
+                    </span>
                   </TableCell>
-                  <TableCell><StatusPill tone={inv.tone}>{inv.status}</StatusPill></TableCell>
+                  <TableCell>
+                    <StatusPill tone={inv.tone}>{inv.status}</StatusPill>
+                  </TableCell>
                   <TableCell className="text-xs text-muted-foreground">{inv.meta}</TableCell>
                 </TableRow>
               ))}

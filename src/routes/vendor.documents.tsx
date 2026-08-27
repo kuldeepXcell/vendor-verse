@@ -12,7 +12,7 @@ export const Route = createFileRoute("/vendor/documents")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "My Documents — Nexus Portal" }],
+    meta: [{ title: "My Documents — Vendor Verse" }],
   }),
   component: VendorDocumentsPage,
 });

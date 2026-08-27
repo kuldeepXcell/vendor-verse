@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "";
+// Absolute origin for <loc> entries. The sitemap spec requires absolute URLs,
+// so set VITE_SITE_URL (e.g. https://vendor-verse.example.com) before building.
+// VITE_* values are inlined at build time, not read at boot — rebuild to change it.
+const BASE_URL = (import.meta.env.VITE_SITE_URL ?? "").replace(/\/$/, "");
 
 interface SitemapEntry {
   path: string;

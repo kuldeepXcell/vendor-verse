@@ -9,7 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, CheckCircle2, PackageOpen } from "lucide-react";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { FadeIn } from "@/components/motion";
@@ -18,7 +23,7 @@ export const Route = createFileRoute("/vendor/purchase-orders")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "My Purchase Orders — Nexus Portal" }],
+    meta: [{ title: "My Purchase Orders — Vendor Verse" }],
   }),
   component: VendorPOPage,
 });
@@ -49,7 +54,8 @@ function VendorPOPage() {
       <FadeIn>
         <div className="mb-4 flex items-center gap-4">
           <div className="text-sm text-muted-foreground">
-            <AnimatedCounter value={myPOs.length} className="font-semibold text-foreground" /> total POs
+            <AnimatedCounter value={myPOs.length} className="font-semibold text-foreground" /> total
+            POs
           </div>
         </div>
       </FadeIn>
@@ -105,7 +111,9 @@ function VendorPOPage() {
                     <TableCell className="tabular-nums">{po.value}</TableCell>
                     <TableCell className="text-muted-foreground">{po.created}</TableCell>
                     <TableCell className="text-muted-foreground">{po.delivery}</TableCell>
-                    <TableCell><StatusPill tone={po.tone}>{po.status}</StatusPill></TableCell>
+                    <TableCell>
+                      <StatusPill tone={po.tone}>{po.status}</StatusPill>
+                    </TableCell>
                     <TableCell className="text-right">
                       {po.status.toLowerCase().includes("acknowledgement") && (
                         <Button

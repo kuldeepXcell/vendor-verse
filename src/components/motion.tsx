@@ -9,10 +9,7 @@ type FadeInProps = {
 
 export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
   return (
-    <div
-      className={cn("motion-fade-up", className)}
-      style={{ animationDelay: `${delay}ms` }}
-    >
+    <div className={cn("motion-fade-up", className)} style={{ animationDelay: `${delay}ms` }}>
       {children}
     </div>
   );

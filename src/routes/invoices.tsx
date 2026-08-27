@@ -23,7 +23,7 @@ export const Route = createFileRoute("/invoices")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Invoices — Nexus Portal" },
+      { title: "Invoices — Vendor Verse" },
       { name: "description", content: "Approve invoices, match POs, and schedule payments." },
     ],
   }),
@@ -44,9 +44,7 @@ function InvoicesPage() {
 
   const filtered = useMemo(() => {
     if (activeChip === "All") return invoices;
-    return invoices.filter((i) =>
-      i.status.toLowerCase().includes(activeChip.toLowerCase()),
-    );
+    return invoices.filter((i) => i.status.toLowerCase().includes(activeChip.toLowerCase()));
   }, [invoices, activeChip]);
 
   function toggleFilters() {
@@ -154,15 +152,15 @@ function InvoicesPage() {
               <TableRow
                 key={i.id}
                 className="cursor-pointer"
-                onClick={() => toast.info(`Invoice ${i.id}`, { description: `${i.vendor} · ${i.value}` })}
+                onClick={() =>
+                  toast.info(`Invoice ${i.id}`, { description: `${i.vendor} · ${i.value}` })
+                }
               >
                 <TableCell className="font-mono text-xs">{i.id}</TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">{i.po}</TableCell>
                 <TableCell className="font-medium">{i.vendor}</TableCell>
                 <TableCell className="text-xs">
-                  <span
-                    className={i.match.includes("✕") ? "text-destructive" : "text-success"}
-                  >
+                  <span className={i.match.includes("✕") ? "text-destructive" : "text-success"}>
                     {i.match}
                   </span>
                 </TableCell>

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/settings")({
   ssr: false,
   beforeLoad: requireAuth("admin"),
-  head: () => ({ meta: [{ title: "Settings — Nexus Portal" }] }),
+  head: () => ({ meta: [{ title: "Settings — Vendor Verse" }] }),
   component: SettingsPage,
 });
 
@@ -18,13 +18,15 @@ const cardDefs = [
     id: "notifications",
     icon: Bell,
     title: "Notifications",
-    description: "Configure email and in-app alerts for PO updates, invoice submissions, and compliance expirations.",
+    description:
+      "Configure email and in-app alerts for PO updates, invoice submissions, and compliance expirations.",
   },
   {
     id: "approvals",
     icon: ShieldCheck,
     title: "Approval workflows",
-    description: "Set thresholds for auto-approval, multi-level sign-off chains, and delegation rules.",
+    description:
+      "Set thresholds for auto-approval, multi-level sign-off chains, and delegation rules.",
   },
   {
     id: "team",

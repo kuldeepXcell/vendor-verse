@@ -62,7 +62,10 @@ export function AnimatedBar({
   });
 
   return (
-    <div ref={ref} className={cn("h-1.5 w-full overflow-hidden rounded-full bg-secondary", className)}>
+    <div
+      ref={ref}
+      className={cn("h-1.5 w-full overflow-hidden rounded-full bg-secondary", className)}
+    >
       <div
         className={cn("h-full rounded-full bg-primary", barClassName)}
         style={{ width: `${width}%` }}

@@ -21,7 +21,7 @@ export const Route = createFileRoute("/payments")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Payments — Nexus Portal" },
+      { title: "Payments — Vendor Verse" },
       { name: "description", content: "Schedule vendor payments and track payment runs." },
     ],
   }),
@@ -29,7 +29,8 @@ export const Route = createFileRoute("/payments")({
 });
 
 function PaymentsPage() {
-  const { paymentRuns, schedulePaymentRun, reschedulePaymentRun, markPaymentRunProcessed } = useDemoStore();
+  const { paymentRuns, schedulePaymentRun, reschedulePaymentRun, markPaymentRunProcessed } =
+    useDemoStore();
   const nextRun = paymentRuns.find((r) => r.status === "Scheduled") ?? paymentRuns[0];
 
   return (
@@ -115,8 +116,8 @@ function PaymentsPage() {
           </div>
           <ul className="mt-4 space-y-3">
             {[
-              { name: "ACH — Chase •• 4821", note: "Primary", tone: "success" as const },
-              { name: "Wire — HSBC •• 9903", note: "International", tone: "info" as const },
+              { name: "ACH — Northlake •• 4821", note: "Primary", tone: "success" as const },
+              { name: "Wire — Continental •• 9903", note: "International", tone: "info" as const },
               { name: "Virtual card — Ramp", note: "Auto-match", tone: "muted" as const },
             ].map((m) => (
               <li key={m.name} className="flex items-center justify-between gap-3">

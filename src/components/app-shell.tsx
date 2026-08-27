@@ -22,11 +22,7 @@ import { DEMO_VENDOR_NAME } from "@/lib/demo-data";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type NavItem = {
   title: string;
@@ -131,7 +127,7 @@ export function AppShell({
   const displayName =
     role === "admin"
       ? "Ava Klein"
-      : session.email.split("@")[0]?.replace(/[._]/g, " ") ?? "Vendor";
+      : (session.email.split("@")[0]?.replace(/[._]/g, " ") ?? "Vendor");
   const displayTitle = role === "admin" ? "Procurement lead" : DEMO_VENDOR_NAME;
   const avatar = role === "admin" ? "AK" : initialsFromEmail(session.email);
 
@@ -170,13 +166,13 @@ export function AppShell({
         >
           <img
             src="/logo-animated.svg"
-            alt="Nexus"
+            alt="Vendor Verse"
             className="h-9 w-9 shrink-0 rounded-lg"
             width={36}
             height={36}
           />
           <div className="min-w-0">
-            <div className="font-display text-sm font-bold tracking-tight">Nexus</div>
+            <div className="font-display text-sm font-bold tracking-tight">Vendor Verse</div>
             <div className="truncate text-[11px] uppercase tracking-widest text-sidebar-foreground/60">
               {role === "vendor" ? "Vendor workspace" : "Admin workspace"}
             </div>
@@ -222,9 +218,7 @@ export function AppShell({
               <div className="truncate text-sm font-medium capitalize text-sidebar-foreground">
                 {displayName}
               </div>
-              <div className="truncate text-[11px] text-sidebar-foreground/60">
-                {displayTitle}
-              </div>
+              <div className="truncate text-[11px] text-sidebar-foreground/60">{displayTitle}</div>
             </div>
             <Button
               variant="ghost"
@@ -249,9 +243,7 @@ export function AppShell({
             {breadcrumb?.map((b, i) => (
               <span key={i} className="flex items-center gap-2">
                 <ChevronRight className="h-3.5 w-3.5 opacity-50" />
-                <span className={i === breadcrumb.length - 1 ? "text-foreground" : ""}>
-                  {b}
-                </span>
+                <span className={i === breadcrumb.length - 1 ? "text-foreground" : ""}>{b}</span>
               </span>
             ))}
           </div>
@@ -333,9 +325,7 @@ export function AppShell({
                   to={item.to}
                   className={
                     "flex min-w-0 flex-1 flex-col items-center gap-1 rounded-lg px-1 py-1.5 text-[10px] font-medium transition-colors " +
-                    (active
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground")
+                    (active ? "text-primary" : "text-muted-foreground hover:text-foreground")
                   }
                 >
                   <Icon className="h-4 w-4 shrink-0" />

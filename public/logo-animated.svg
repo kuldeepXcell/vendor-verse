@@ -1,237 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="800" height="800" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-labelledby="title desc">
-    <title id="title">Animated Nexus Mods logo</title>
-    <desc id="desc">A smooth looping animation with a rotating logo, breathing background, orbiting highlights, and a
-        soft shine.
-    </desc>
-
-    <defs>
-        <radialGradient id="bgGradient" cx="36%" cy="28%" r="78%">
-            <stop offset="0%" stop-color="#f6b15d"/>
-            <stop offset="55%" stop-color="#da8e35"/>
-            <stop offset="100%" stop-color="#ad6421"/>
-        </radialGradient>
-
-        <linearGradient id="shineGradient" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-            <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
-            <stop offset="50%" stop-color="#ffffff" stop-opacity="0.48"/>
-            <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-        </linearGradient>
-
-        <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#6f350f" flood-opacity="0.34"/>
-        </filter>
-
-        <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="10" result="blur"/>
-            <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-
-        <clipPath id="circleClip">
-            <circle cx="512" cy="512" r="512"/>
-        </clipPath>
-    </defs>
-
+<!--
+  Vendor Verse animated mark. Same geometry as logo.svg; the check draws in and
+  the node breathes. Honours prefers-reduced-motion, matching the app's own
+  reduced-motion rule in src/styles.css.
+-->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-labelledby="vva-title vva-desc">
+  <title id="vva-title">Vendor Verse</title>
+  <desc id="vva-desc">The Vendor Verse check draws itself in and its node pulses gently.</desc>
+  <defs>
+    <linearGradient id="vva-tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#283345"/>
+      <stop offset="1" stop-color="#3c4a63"/>
+    </linearGradient>
     <style>
-        /*
-        MASTER LOOP: 12 seconds
-
-        12s logo rotation = 1 revolution
-        6s primary orbit = 2 revolutions
-        12s reverse orbit = 1 revolution
-        6s background breathe = 2 cycles
-        4s halo pulse = 3 cycles
-        3s logo pulse = 4 cycles
-        6s shine sweep = 2 cycles
-        */
-
-        .bg,
-        .halo,
-        .orbit,
-        .logo-spin,
-        .logo-pulse,
-        .shine {
-        transform-box: view-box;
-        transform-origin: 512px 512px;
-        }
-
-        .bg {
-        will-change: transform;
-        }
-
-        .halo {
-        fill: none;
-        stroke: #fff;
-        opacity: 0;
-        animation: haloPulse 4s ease-out infinite;
-        will-change: transform, opacity;
-        }
-
-        /*
-        Negative delays ensure all halos are already correctly phased
-        when the SVG first appears.
-        */
-        .halo.delay-1 {
-        animation-delay: -1.333333s;
-        }
-
-        .halo.delay-2 {
-        animation-delay: -2.666667s;
-        }
-
-        .orbit {
-        fill: none;
-        stroke: #fff;
-        stroke-linecap: round;
-        animation: orbitSpin 6s linear infinite;
-        will-change: transform;
-        }
-
-        .orbit.reverse {
-        animation-direction: reverse;
-        animation-duration: 12s;
-        }
-
-        .logo-spin {
-        animation: logoSpin 12s linear infinite;
-        will-change: transform;
-        }
-
-        .logo-pulse {
-        animation: logoPulse 3s ease-in-out infinite;
-        will-change: transform;
-        }
-
-        .logo-path {
-        shape-rendering: geometricPrecision;
-        }
-
-        .shine {
-        animation: shineSweep 6s ease-in-out infinite;
-        will-change: transform, opacity;
-        }
-
-        @keyframes breathe {
-        0%,
-        100% {
-        transform: scale(1);
-        }
-
-        50% {
-        transform: scale(1.025);
-        }
-        }
-
-        @keyframes haloPulse {
-        0% {
-        opacity: 0;
-        transform: scale(0.78);
-        stroke-width: 14;
-        }
-
-        22% {
-        opacity: 0.2;
-        }
-
-        68% {
-        opacity: 0;
-        transform: scale(1.08);
-        stroke-width: 2;
-        }
-
-        100% {
-        opacity: 0;
-        transform: scale(1.08);
-        stroke-width: 2;
-        }
-        }
-
-        @keyframes orbitSpin {
-        from {
-        transform: rotate(0deg);
-        }
-
-        to {
-        transform: rotate(360deg);
-        }
-        }
-
-        @keyframes logoSpin {
-        from {
-        transform: rotate(0deg);
-        }
-
-        to {
-        transform: rotate(360deg);
-        }
-        }
-
-        @keyframes logoPulse {
-        0%,
-        100% {
-        transform: scale(1);
-        }
-
-        50% {
-        transform: scale(1.035);
-        }
-        }
-
-        @keyframes shineSweep {
-        0%,
-        12% {
-        transform: translateX(-1200px) rotate(-18deg);
-        opacity: 0;
-        }
-
-        26% {
-        opacity: 0.55;
-        }
-
-        48% {
-        transform: translateX(1200px) rotate(-18deg);
-        opacity: 0;
-        }
-
-        100% {
-        transform: translateX(1200px) rotate(-18deg);
-        opacity: 0;
-        }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-        * {
-        animation: none !important;
-        }
-        }
+      .vva-check {
+        stroke-dasharray: 700;
+        animation: vva-draw 3.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      }
+      .vva-node { animation: vva-breathe 3.6s ease-in-out infinite; transform-origin: 758px 272px; }
+      @keyframes vva-draw {
+        0%   { stroke-dashoffset: 700; }
+        35%  { stroke-dashoffset: 0; }
+        88%  { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 700; }
+      }
+      @keyframes vva-breathe {
+        0%, 30%  { opacity: 0; transform: scale(0.4); }
+        45%      { opacity: 1; transform: scale(1.15); }
+        60%, 88% { opacity: 1; transform: scale(1); }
+        100%     { opacity: 0; transform: scale(0.4); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .vva-check { animation: none; stroke-dasharray: none; }
+        .vva-node  { animation: none; opacity: 1; transform: none; }
+      }
     </style>
-
-    <g class="bg">
-        <circle cx="512" cy="512" r="512" fill="url(#bgGradient)"/>
-    </g>
-
-    <g clip-path="url(#circleClip)" pointer-events="none">
-        <circle class="halo" cx="512" cy="512" r="356"/>
-        <circle class="halo delay-1" cx="512" cy="512" r="356"/>
-        <circle class="halo delay-2" cx="512" cy="512" r="356"/>
-
-        <circle class="orbit" cx="512" cy="512" r="430" stroke-width="5" stroke-dasharray="42 112" opacity="0.17"/>
-        <circle class="orbit reverse" cx="512" cy="512" r="394" stroke-width="3" stroke-dasharray="16 74"
-                opacity="0.13"/>
-
-        <g class="logo-spin" filter="url(#softGlow)">
-            <g class="logo-pulse">
-                <path class="logo-path" fill="#fff"
-                      d="M765.2 609.1c-3.1-10.1-7.6-19.8-12.9-29.3-3.1-5.7-6.9-11.3-11-17.3 6.9-30.8 7.6-62.9 1.9-94.1-2.8-14.8-6.9-29.3-12.6-43.4 2.8-7.6 5.3-15.1 7.6-22.7 2.8-10.1 4.4-21.1 5-32.7.3-5.4.3-10.7 0-15.7-.3-14.5-4.7-24.9-10.4-32.1-1.6-2.5-3.8-4.7-6-6.6l-4.4-4.4c-5.3-5-11-10.1-16.7-14.8-12.9-10.7-25.2-19.2-37.1-26.1-5.4-3.1-12.9-7.2-21.7-10.1-5-1.6-9.4-2.5-14.2-3.1-1.9-.3-4.1-.3-6-.3-9.1 0-16.1 2.2-19.2 3.5h-.3c-14.2 4.4-27.7 11.6-42.5 21.7-4.4-.9-8.8-1.9-13.2-2.5-18.6-3.1-38.1-4.1-57.3-2.5-18.3 1.3-36.5 5-53.5 10.7-7.2 2.5-14.2 5-20.8 7.9-10.1-3.8-21.4-7.2-34-9.1-8.2-1.3-16.7-1.9-24.5-1.9h-.3c-4.1 0-8.2.3-12 .6-12 .3-20.8 4.4-27.1 9.1-2.8 1.9-5.3 4.1-7.6 6.6l-4.4 4.4c-5 5-9.8 10.7-14.5 16.4-10.4 12.9-18.9 24.9-25.8 36.8-3.1 5.4-7.2 12.6-10.1 21.4-1.6 4.7-2.5 9.1-3.1 13.5-1.9 12 1.3 21.4 2.5 25.2v.3c6 18.3 15.4 34 23 45-.9 3.8-1.6 7.9-2.2 12-2.8 19.2-3.5 38.7-1.6 57.9 1.9 18.3 5.7 36.5 11.3 52.9 1.3 3.1 2.2 6.3 3.5 9.1-.3.9-.6 1.9-.9 2.8-4.1 11-9.4 25.5-11.6 41.9-1.3 7.9-1.6 16.1-1.6 23.6 0 3.8.3 7.2.6 10.7.3 10.7 3.8 18.9 7.9 25.2 2.2 3.5 5 6.6 8.2 9.4l4.4 4.4c5.3 5 11 10.1 16.7 14.8 12.9 10.7 25.2 19.2 37.1 26.1 5.3 3.1 12.9 7.2 21.7 10.1 5 1.6 9.4 2.5 14.2 3.1 1.9.3 4.1.3 6 .3 9.1 0 16.1-2.5 19.2-2.2h.3c15.1-5 29.6-12.6 45.9-24.2 2.2.3 4.7.9 6.9 1.3 18.9 3.5 38.4 5 57.6 3.8 18.6-.9 37.1-4.4 54.8-9.8 6-1.9 12.3-4.1 18.3-6.6 11.3 4.4 23.9 8.8 38.1 11 8.8 1.6 17.3 2.2 25.8 2.2h.3c4.1 0 8.2-.3 12-.6 12-.6 20.8-4.4 27.1-9.1 2.8-2.2 5.4-4.4 7.6-6.9l3.8-3.8c10.1-10.7 19.8-22.3 28.3-34.3 7.9-11 16.7-24.2 22.3-40.3 1.6-4.7 2.8-8.8 3.5-13.2 1.8-12.8-1.1-22.2-2.3-26zm-72.9-35.9c-13.4-13.8-36.2-30.8-79-49.5l11.6-22-89.1 23.9L568 608l12.9-24.5c11 5 19.2 10.1 27.4 16.1 12.6 8.8 24.2 18.6 34 29 23.8 24.1 36.3 48.8 33.1 69.2l-.4.2-1.6.3c-11 1.3-23 .6-35.2-2.2h-.3c-13.2-3.5-26.3-8.4-39.5-14.5-25.9 13.2-55.3 20.8-86.4 20.8-21.4 0-41.9-3.6-61.1-10.1 13.5-13.6 29.9-36.3 47.9-77.4l22 11.6-23.9-89.1-82.8 31.6 24.9 13.5c-5 11-10.1 19.2-16.1 27.4-8.8 12.6-18.6 24.2-29 34-24.1 23.8-48.8 36.3-69.2 33.1l-.4-.4-.3-1.6c-1.3-11-.6-23 2.2-35.2v-.3c3.7-14 9-27.9 15.6-41.9-13-25.7-20.3-54.8-20.3-85.6 0-19.9 3.1-39.1 8.8-57.1 13.3 13.9 36.2 31.2 79.7 50.2l-11.6 22 89.1-23.9-31.8-83.4-13.3 25.2c-11-5-19.2-10.1-27.4-16.1-12.6-8.8-24.2-18.6-34-29-23.6-24-36.2-48.5-33.1-68.8l.7-.7 1.6-.3c11-1.3 23-.6 35.2 2.2h.3c11.7 3.1 23.4 7.3 35.1 12.5C448 330 479 321.6 512 321.6c21.7 0 42.5 3.7 61.9 10.3-14 13.2-31.4 36.1-50.6 80l-22-11.6 23.9 89.1 83.1-31.5-25.2-13.5c5-11 10.1-19.2 16.1-27.4 8.8-12.6 18.6-24.2 29-34 24.1-23.8 48.8-36.3 69.2-33.1l.4.4.3 1.6c1.3 11 .6 23-2.2 35.2v.3c-3.4 12.8-8.2 25.7-14 38.5 13.2 25.9 20.6 55.1 20.6 86.2-.1 21.3-3.7 41.9-10.2 61.1z"/>
-            </g>
-        </g>
-
-        <rect class="shine" x="-160" y="-220" width="340" height="1500" fill="url(#shineGradient)"/>
-    </g>
+  </defs>
+  <rect width="1024" height="1024" rx="232" fill="url(#vva-tile)"/>
+  <path class="vva-check" d="M300 344 L474 668 L688 358" fill="none" stroke="#f9fafb"
+        stroke-width="92" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle class="vva-node" cx="758" cy="272" r="70" fill="#7b8799"/>
 </svg>

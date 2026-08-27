@@ -3,10 +3,7 @@ import { toast } from "sonner";
 import { AppShell, StatusPill } from "@/components/app-shell";
 import { requireAuth } from "@/lib/auth-guards";
 import { useDemoStore } from "@/lib/demo-store";
-import {
-  DEMO_VENDOR_NAME,
-  DEMO_VENDOR_INITIAL,
-} from "@/lib/demo-data";
+import { DEMO_VENDOR_NAME, DEMO_VENDOR_INITIAL } from "@/lib/demo-data";
 import { FileUploadButton } from "@/components/file-upload-button";
 import { Building2, MapPin, Banknote, User, ShieldCheck } from "lucide-react";
 import { FadeIn } from "@/components/motion";
@@ -15,7 +12,7 @@ export const Route = createFileRoute("/vendor/profile")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "Profile — Nexus Portal" }],
+    meta: [{ title: "Profile — Vendor Verse" }],
   }),
   component: VendorProfilePage,
 });
@@ -48,7 +45,7 @@ function VendorProfilePage() {
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <InfoRow icon={Building2} label="Category" value="Components" />
               <InfoRow icon={MapPin} label="Location" value="Portland, OR" />
-              <InfoRow icon={Banknote} label="Banking" value="Chase •• 4821" />
+              <InfoRow icon={Banknote} label="Banking" value="Northlake •• 4821" />
               <InfoRow icon={User} label="Primary contact" value="Sara Chen" />
             </div>
           </div>
@@ -67,7 +64,9 @@ function VendorProfilePage() {
                   className="flex cursor-pointer items-center justify-between gap-3 rounded-md px-1 py-1 transition-colors hover:bg-muted/50"
                   onClick={() => handleComplianceClick(d)}
                 >
-                  <span className="truncate text-sm">{d.name.replace(` — ${DEMO_VENDOR_NAME}`, "")}</span>
+                  <span className="truncate text-sm">
+                    {d.name.replace(` — ${DEMO_VENDOR_NAME}`, "")}
+                  </span>
                   <StatusPill tone={d.tone}>{d.status}</StatusPill>
                 </li>
               ))}
@@ -90,14 +89,24 @@ function VendorProfilePage() {
   );
 }
 
-function InfoRow({ icon: Icon, label, value }: { icon: typeof Building2; label: string; value: string }) {
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof Building2;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="flex items-center gap-3">
       <div className="grid h-9 w-9 place-items-center rounded-lg bg-secondary text-secondary-foreground">
         <Icon className="h-4 w-4" />
       </div>
       <div>
-        <div className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">{label}</div>
+        <div className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+          {label}
+        </div>
         <div className="text-sm font-medium">{value}</div>
       </div>
     </div>

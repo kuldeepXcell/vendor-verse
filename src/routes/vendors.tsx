@@ -20,8 +20,11 @@ export const Route = createFileRoute("/vendors")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Vendors — Nexus Portal" },
-      { name: "description", content: "Manage vendor profiles, onboarding status, and compliance." },
+      { title: "Vendors — Vendor Verse" },
+      {
+        name: "description",
+        content: "Manage vendor profiles, onboarding status, and compliance.",
+      },
     ],
   }),
   component: VendorsPage,
@@ -32,8 +35,7 @@ const statusFilters = ["All", "Active", "Onboarding", "Review", "Paused"] as con
 function VendorsPage() {
   const { vendors, inviteVendor } = useDemoStore();
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] =
-    useState<(typeof statusFilters)[number]>("All");
+  const [statusFilter, setStatusFilter] = useState<(typeof statusFilters)[number]>("All");
   const [showFilters, setShowFilters] = useState(true);
 
   const filtered = useMemo(() => {
@@ -81,7 +83,9 @@ function VendorsPage() {
               { name: "location", label: "Location", placeholder: "e.g. Portland, OR" },
             ]}
             submitLabel="Send invite"
-            onSubmit={(v) => inviteVendor(v as { name: string; category: string; location: string })}
+            onSubmit={(v) =>
+              inviteVendor(v as { name: string; category: string; location: string })
+            }
           />
         </>
       }
@@ -146,13 +150,19 @@ function VendorsPage() {
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => toast.info("Opening message", { description: v.name })}>
+                    <DropdownMenuItem
+                      onClick={() => toast.info("Opening message", { description: v.name })}
+                    >
                       Message
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info("Viewing profile", { description: v.name })}>
+                    <DropdownMenuItem
+                      onClick={() => toast.info("Viewing profile", { description: v.name })}
+                    >
                       View profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.warning("Vendor paused", { description: v.name })}>
+                    <DropdownMenuItem
+                      onClick={() => toast.warning("Vendor paused", { description: v.name })}
+                    >
                       Pause vendor
                     </DropdownMenuItem>
                   </DropdownMenuContent>

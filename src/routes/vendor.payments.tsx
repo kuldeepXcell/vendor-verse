@@ -19,7 +19,7 @@ export const Route = createFileRoute("/vendor/payments")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "My Payments — Nexus Portal" }],
+    meta: [{ title: "My Payments — Vendor Verse" }],
   }),
   component: VendorPaymentsPage,
 });
@@ -76,7 +76,7 @@ function VendorPaymentsPage() {
                 <Banknote className="h-4 w-4" />
               </div>
               <div>
-                <div className="text-sm font-medium">ACH — Chase •• 4821</div>
+                <div className="text-sm font-medium">ACH — Northlake •• 4821</div>
                 <div className="text-xs text-muted-foreground">Primary · Verified</div>
               </div>
             </div>
@@ -108,11 +108,7 @@ function VendorPaymentsPage() {
             </TableHeader>
             <TableBody>
               {vendorPayments.map((p) => (
-                <TableRow
-                  key={p.id}
-                  className="cursor-pointer"
-                  onClick={() => handleRowClick(p)}
-                >
+                <TableRow key={p.id} className="cursor-pointer" onClick={() => handleRowClick(p)}>
                   <TableCell className="font-mono text-xs">{p.id}</TableCell>
                   <TableCell>{p.date}</TableCell>
                   <TableCell className="text-muted-foreground">{p.method}</TableCell>

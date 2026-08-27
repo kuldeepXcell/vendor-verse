@@ -1,0 +1,111 @@
+/* ---------------------------------------------------------------------------
+   Vendor Verse marketing cards.
+
+   Every colour here is a hex resolution of a token in src/styles.css, so the
+   cards cannot drift from the product:
+     --primary            oklch(0.32 0.035 260)   #283345
+     --sidebar            oklch(0.245 0.03 260)   #18212f
+     --foreground         oklch(0.24 0.03 255)    #15202d
+     --muted-foreground   oklch(0.52 0.02 258)    #626a75
+     --accent             oklch(0.62 0.03 258)    #7b8799
+     --success            oklch(0.62 0.13 155)    #349d62
+     --border             oklch(0.9 0.01 255)     #dadee5
+     --card               oklch(1 0 0)            #ffffff
+   Typefaces are the app's own: Urbanist (display) and Epilogue (body),
+   embedded from embedded-fonts.css so the generator needs no network.
+
+   BACKGROUND IS TRANSPARENT BY DESIGN — the listing applies its own pastel.
+   Nothing here may paint a full-bleed background colour.
+--------------------------------------------------------------------------- */
+
+:root {
+  --primary: #283345;
+  --sidebar: #18212f;
+  --fg: #15202d;
+  --muted: #626a75;
+  --accent: #7b8799;
+  --success: #349d62;
+  --border: #dadee5;
+  --card: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: transparent;            /* never paint a ground */
+  font-family: 'Epilogue', ui-sans-serif, system-ui, sans-serif;
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+.card--cover     { width: 1440px; height: 810px;  }   /* 16:9  -> 2880x1620 @2x */
+.card--hero      { width: 1440px; height: 720px;  }   /* 2:1   -> 2880x1440 @2x */
+.card--thumbnail { width: 1440px; height: 900px;  }   /* 16:10 -> 2880x1800 @2x */
+
+/* --- brand lockup ------------------------------------------------------- */
+.lockup { display: flex; align-items: center; gap: 14px; }
+.lockup img { width: 56px; height: 56px; border-radius: 14px; display: block; }
+.lockup .name {
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 800; font-size: 30px; letter-spacing: -0.02em; line-height: 1;
+}
+.lockup .kicker {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted); margin-top: 5px;
+}
+
+/* --- type -------------------------------------------------------------- */
+.headline {
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.02;
+  color: var(--fg);
+}
+.sub { font-size: 19px; line-height: 1.5; color: var(--muted); font-weight: 400; }
+
+/* --- fact chips -------------------------------------------------------- */
+.chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 15px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(40, 51, 69, 0.12);
+  font-size: 13.5px; font-weight: 600; color: var(--primary);
+  white-space: nowrap;
+}
+.chip .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); }
+.chip .dot--ok { background: var(--success); }
+
+/* --- device chrome ----------------------------------------------------- */
+.browser {
+  border-radius: 14px 14px 0 0;
+  background: var(--card);
+  box-shadow: 0 40px 90px -30px rgba(21, 32, 45, 0.42), 0 2px 8px rgba(21, 32, 45, 0.08);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-bottom: none;
+}
+.browser__bar {
+  height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px;
+  background: #f3f5f9; border-bottom: 1px solid var(--border);
+}
+.browser__dot { width: 10px; height: 10px; border-radius: 999px; background: #d3d8e0; }
+.browser__url {
+  margin-left: 10px; height: 19px; flex: 1; max-width: 340px; border-radius: 999px;
+  background: #e6e9f0; display: flex; align-items: center; padding: 0 10px;
+  font-size: 10px; color: #8b93a1; letter-spacing: 0.01em;
+}
+.browser__shot { display: block; width: 100%; }
+
+.phone {
+  width: 268px; border-radius: 34px; padding: 9px;
+  background: var(--sidebar);
+  box-shadow: 0 34px 70px -22px rgba(21, 32, 45, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.phone__screen { border-radius: 26px; overflow: hidden; background: var(--card); }
+.phone__screen img { display: block; width: 100%; }

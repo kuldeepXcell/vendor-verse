@@ -14,11 +14,13 @@ Session-driven dual shell (approved): one app, two navs, route guards by role, s
 ## Roles
 
 ### Admin
+
 - Home: `/dashboard`
 - Nav: Dashboard, Vendors, Purchase Orders, Invoices, Documents, Payments, Messages, Settings
 - Data: full org dummy set
 
 ### Vendor
+
 - Home: `/vendor`
 - Nav: Home, My POs, My Invoices, Documents, Payments, Messages, Profile
 - Company: Aster Manufacturing (demo)

@@ -1,31 +1,188 @@
 # Vendor Verse
 
-A vendor management portal template — admin and vendor dashboards for purchase orders, invoices,
-payments, documents, and messaging.
+A vendor management portal template: two paired workspaces — an **admin/procurement** side and a
+**vendor** side — covering vendor onboarding, purchase orders, invoice approval, payment runs,
+compliance documents, and messaging. Built with TanStack Start, React 19, Tailwind CSS 4 and
+shadcn/ui, with a role-aware shell that switches navigation, notifications and data scope from a
+single sign-in screen.
 
-## This is a frontend-only demo
+**Live demo:** _not published yet — replace this line with your demo URL before listing._
 
-There is no real backend. Everything runs in the browser:
+## What it is not
 
-- **Data** — all vendors, purchase orders, invoices, payments, documents, and messages come from
-  static seed data in [`src/lib/demo-data.ts`](src/lib/demo-data.ts). Interactions (approving an
-  invoice, inviting a vendor, uploading a file, sending a message, etc.) are held in memory by
-  [`src/lib/demo-store.tsx`](src/lib/demo-store.tsx) and reset on page reload — nothing is
-  persisted or sent to a server.
-- **Authentication** — sign-in is a mock. Any non-empty email and password succeeds; there is no
-  password check, token, or server call (see [`src/lib/auth-session.ts`](src/lib/auth-session.ts),
-  [`src/lib/auth-context.tsx`](src/lib/auth-context.tsx),
-  [`src/lib/auth-guards.ts`](src/lib/auth-guards.ts)). The role you pick on the login screen
-  (Admin or Vendor) just decides which mock dashboard you land on.
-- **File uploads** — the file picker reads a file's name/size/type locally and simulates a
-  successful upload; no file content is read, stored, or transmitted anywhere.
+Read this section before you buy or before you plan a sprint around it.
 
-There are no API keys, secrets, or real API endpoints anywhere in this repo.
+- **A frontend prototype.** There is no backend of any kind.
+- **Mock data only.** Every vendor, purchase order, invoice, payment, document and message is a
+  literal in [`src/lib/demo-data.ts`](src/lib/demo-data.ts).
+- **No real authentication.** Any non-empty email plus any non-empty password signs you in. There
+  is no password check, no token, no server call. The Admin/Vendor buttons simply choose which
+  workspace you land in.
+- **No database, no ORM, no migrations.** Nothing is written anywhere on a server.
+- **No payments.** The payment-run screens move rows between statuses in memory. No gateway, no
+  ACH, no card processing.
+- **Nothing persists.** All data edits live in React state and reset on page reload. The one
+  exception is your *sign-in choice*, which is kept in `sessionStorage` and a
+  `vendorverse.session` cookie so a refresh does not throw you back to the login screen — clearing
+  it is what the sign-out button does.
+- **File uploads are simulated.** The picker reads a file's name, size and type locally and shows
+  it in the list. File contents are never read, stored, or transmitted.
+- **No internationalisation.** There is no i18n library, no locale files and no translations. All
+  copy is hardcoded English, and currency is hardcoded USD as formatted strings.
+- **Not accessibility-audited.** Radix primitives bring sensible keyboard and ARIA behaviour, but
+  no audit has been run against WCAG.
 
-## Commands
+## Requirements
 
-- `pnpm install` — install dependencies
-- `pnpm dev` — Vite dev server (port 3000)
-- `pnpm build` — production build
-- `pnpm start` — run Node server from `.output/server/index.mjs`
-- `pnpm lint` / `pnpm format`
+| | |
+| --- | --- |
+| **Node** | 22.12 or newer. Verified on **v22.22.0** (see [`.nvmrc`](.nvmrc)). The floor is set by `@tanstack/react-start`, whose `engines` field is `>=22.12.0`. Vite 8 and Nitro 3 themselves allow `^20.19.0 || >=22.12.0`. |
+| **Package manager** | **pnpm 10** (`packageManager: pnpm@10.34.1`). Only `pnpm-lock.yaml` is committed, so `npm install` and `yarn install` will resolve a different, untested dependency tree. Use pnpm. |
+| **Disk** | ~350 MB for `node_modules`. |
+
+**Browsers.** Any evergreen Chrome, Edge, Firefox or Safari from 2023 onward. The floor is set by
+CSS features the design system uses directly, not by a polyfill choice:
+
+- `oklch()` colour — 76 lines of [`src/styles.css`](src/styles.css). Chrome/Edge 111+,
+  Safari 15.4+, Firefox 113+.
+- `color-mix()` — used by the `bento-card-interactive` hover state. Chrome/Edge 111+, Safari 16.2+,
+  Firefox 113+.
+- Tailwind CSS 4 requires the same baseline.
+
+IE and pre-2023 browsers are not supported and will render colours as transparent.
+
+## Quickstart
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Then open **http://localhost:3000** — the sign-in screen. Type any email and any password, and
+choose **Sign in as Admin** or **Sign in as Vendor**.
+
+The port is set explicitly in [`vite.config.ts`](vite.config.ts); if 3000 is taken, Vite prints the
+port it picked instead. The app serves from the root path — there is no `base` or sub-path
+configured.
+
+## Scripts
+
+| Script | Runs | Notes |
+| --- | --- | --- |
+| `pnpm dev` | `vite dev` | Dev server with HMR on port 3000. |
+| `pnpm build` | `vite build` | Production build. Emits the client bundle plus a Nitro server into `.output/`. |
+| `pnpm build:dev` | `vite build --mode development` | Same build, development mode — unminified, for debugging a build-only problem. |
+| `pnpm preview` | `vite preview` | Serves the built client assets. |
+| `pnpm start` | `node .output/server/index.mjs` | Runs the built Nitro server. Requires `pnpm build` first. |
+| `pnpm lint` | `eslint .` | ESLint 9 flat config + Prettier as a lint rule. Exits 0 on a clean tree; 6 `react-refresh` warnings are expected (context providers and shadcn files export non-components alongside components). |
+| `pnpm typecheck` | `tsc --noEmit` | Strict TypeScript, no emit. |
+| `pnpm format` | `prettier --write .` | Formats in place. `pnpm lint` enforces the same rules, so run this before committing. |
+
+## Folder map
+
+| Path | What's in it |
+| --- | --- |
+| `src/routes/` | 20 files: 16 screens, the `__root.tsx` shell, the `/vendor` layout route, the `sitemap[.]xml.ts` endpoint, and a `README.md` on TanStack's file-routing conventions. File-based routing — the filename is the URL. |
+| `src/routeTree.gen.ts` | Generated by `@tanstack/router-plugin` on every dev/build. Never edit; it is gitignored from lint and Prettier. |
+| `src/components/` | 6 app components — the role-aware `app-shell.tsx` (sidebar, header, mobile bottom nav, notifications, search), plus animation and form-dialog helpers. |
+| `src/components/ui/` | 17 shadcn/ui primitives (new-york style, slate base). `sheet`, `skeleton`, `tooltip`, `toggle` and `separator` are unused by the current screens and included for you to build on. |
+| `src/lib/` | 10 modules: the demo data and store, the mock auth trio, CSV export, number formatting, and the SSR error-page helpers. |
+| `src/hooks/` | 4 hooks — animated numbers, in-view detection, a file picker, and `use-mobile` (unused by the current screens; the mobile nav is a bottom bar, not a sheet). |
+| `src/styles.css` | The entire design system: `@theme` token registrations, `:root` and `.dark` colour values, base layer, and the `bento-card` utilities. **This is the one file to edit for colours and fonts.** |
+| `public/` | `logo.svg`, `logo-animated.svg`, `favicon.ico`, `robots.txt`. |
+| `docs/` | The six guides below. |
+
+## Demo accounts and roles
+
+**There is no login to get past.** The sign-in form validates that the email looks like an email and
+that the password is non-empty — nothing else. There are no seeded user records, so there is no
+username or password to look up.
+
+| To view as | Do this | Lands on | Sees |
+| --- | --- | --- | --- |
+| **Admin / procurement** | Any email + any password → **Sign in as Admin** | `/dashboard` | 8 vendors, 10 purchase orders, 9 invoices, 12 documents, 4 payment runs, 5 message threads. Sidebar identity is hardcoded to "Ava Klein · Procurement lead" in [`app-shell.tsx`](src/components/app-shell.tsx). |
+| **Vendor** | Any email + any password → **Sign in as Vendor** | `/vendor` | Only Aster Manufacturing's slice: 3 POs, 3 invoices, 4 documents, 3 payments, 1 thread. Sidebar identity is derived from the email you typed. |
+
+**Switching roles:** click the sign-out button in the sidebar footer (or the header on mobile), then
+sign in as the other role. That clears the session cookie and `sessionStorage`.
+
+Route guards live in [`src/lib/auth-guards.ts`](src/lib/auth-guards.ts): `requireAuth("admin")`
+bounces a vendor to `/vendor` and vice versa, and an unauthenticated visitor to `/`.
+
+## Rebrand in four moves
+
+| # | What | Where | Notes |
+| --- | --- | --- | --- |
+| 1 | **Colours** | [`src/styles.css`](src/styles.css) — the `:root` block (light) and `.dark` block | Every colour is an `oklch()` custom property registered in `@theme inline`. Change the value in `:root`, and the Tailwind utility (`bg-primary`, `text-success`, …) follows everywhere. Keep the `oklch()` format — `color-mix(in oklch, …)` depends on it. |
+| 2 | **Fonts** | `--font-display` and `--font-sans` in the `@theme inline` block, **and** the Google Fonts `<link>` in [`src/routes/__root.tsx`](src/routes/__root.tsx) | Two places. Currently Urbanist (headings) and Epilogue (body), loaded from the Google Fonts CDN — no font files are bundled. |
+| 3 | **App name** | 5 files | The string "Vendor Verse" appears in: `__root.tsx` (title, author, og:title), `index.tsx` (login panel ×2, footer, page title), `app-shell.tsx` (sidebar wordmark, logo `alt`), plus the `— Vendor Verse` title suffix in all 16 route `head()` blocks. `docs/03-branding.md` lists every line. |
+| 4 | **Logo & favicon** | `public/logo.svg`, `public/logo-animated.svg`, `public/favicon.ico` | Replace the files and keep the names, and nothing else needs touching. `__root.tsx` points `rel="icon"` at `/logo.svg`; the sidebar and login screen use `/logo-animated.svg`. Both are hand-authored SVG using the palette tokens. |
+
+Colour literals that sit **outside** the token system, in case you recolour and wonder why these
+did not follow:
+
+| File | Line | Literal | What it is |
+| --- | --- | --- | --- |
+| [`src/routes/index.tsx`](src/routes/index.tsx) | 76 | `oklch(0.62 0.03 258)`, `oklch(0.245 0.03 260)`, `oklch(0.32 0.035 260)` | The login panel's inline radial + linear gradient. Same values as `--accent`, `--sidebar`, `--primary`. |
+| [`public/logo.svg`](public/logo.svg) | 17–24 | `#283345`, `#3c4a63`, `#f9fafb`, `#7b8799` | The mark, as hex so it rasterises in any tool. Hex equivalents of `--primary`, a lighter step, `--primary-foreground`, `--accent`. |
+| [`public/logo-animated.svg`](public/logo-animated.svg) | 13–43 | same four | Same mark, animated. |
+| [`src/components/app-shell.tsx`](src/components/app-shell.tsx) | `StatusPill` | `bg-success/12`, `bg-warning/15`, … | Token-based with opacity modifiers, so they *do* follow a recolour. Listed only because the numbers look like literals. |
+
+## Connecting a real backend
+
+One module is the seam: **[`src/lib/demo-store.tsx`](src/lib/demo-store.tsx)**. It is a React
+context that holds all nine collections in `useState` and exposes 13 mutation functions. Almost
+every screen reads it through `useDemoStore()`, so replacing the provider's internals with real
+fetches — keeping the returned shape — changes nothing in those screens.
+
+Two places bypass the store and read literals directly; a backend swap has to patch them too:
+
+- [`src/routes/vendor.index.tsx:13`](src/routes/vendor.index.tsx#L13) imports `vendorPayments`
+  straight from `demo-data.ts` instead of taking it from the store.
+- [`src/routes/dashboard.tsx`](src/routes/dashboard.tsx) declares three presentational arrays of
+  its own — `activity` (line 488), `docs` (511) and `topVendors` (542) — which are never wired to
+  the store, so they do not react to anything you do in the UI.
+
+The shapes it returns are the exported types in [`src/lib/demo-data.ts`](src/lib/demo-data.ts):
+`Vendor`, `PurchaseOrder`, `Invoice`, `DocumentItem`, `PaymentRun`, `VendorPayment`,
+`MessageThread`, plus `ChatMessage` from the store itself. Note that money and dates are
+**pre-formatted display strings** (`"$48,200"`, `"Aug 21"`), not numbers or ISO dates — a real API
+will hand you numbers, so that is the one shape change you must plan for.
+
+The second seam is auth: [`src/lib/auth-session.ts`](src/lib/auth-session.ts) is the only module
+that reads or writes the session, and [`src/lib/auth-guards.ts`](src/lib/auth-guards.ts) the only
+one that enforces it.
+
+[`docs/05-connect-a-backend.md`](docs/05-connect-a-backend.md) tables all 14 methods with their
+signatures and what each one does today.
+
+## Guides
+
+| | |
+| --- | --- |
+| [`docs/01-setup.md`](docs/01-setup.md) | Install, run, and the failure modes you may hit |
+| [`docs/02-demo-accounts.md`](docs/02-demo-accounts.md) | Roles, guards, and what each persona sees |
+| [`docs/03-branding.md`](docs/03-branding.md) | Every colour, font, name and logo location |
+| [`docs/04-mock-data.md`](docs/04-mock-data.md) | Where seed data lives, how it mutates, how to reset |
+| [`docs/05-connect-a-backend.md`](docs/05-connect-a-backend.md) | The store boundary, method by method |
+| [`docs/06-deploy.md`](docs/06-deploy.md) | Vercel, Node, static, and sub-path behaviour |
+
+## Licence, updates, support
+
+Licensed to you under [`LICENSE.md`](LICENSE.md): unlimited use in your own and your clients'
+projects, no resale or redistribution as a template. See the licence for the exact terms.
+
+Version **1.0.0** — see [`CHANGELOG.md`](CHANGELOG.md). Updates, if any, are published as new
+versions of this listing.
+
+### Third-party assets
+
+| Asset | Where | Licence status |
+| --- | --- | --- |
+| **Urbanist** (headings) | Google Fonts CDN, linked in `__root.tsx` | SIL Open Font License 1.1. Loaded from the CDN; no font binary is bundled in this ZIP. |
+| **Epilogue** (body) | Google Fonts CDN, linked in `__root.tsx` | SIL Open Font License 1.1. Same — CDN only. |
+| **Lucide icons** | `lucide-react` dependency | ISC License. |
+| **shadcn/ui primitives** | `src/components/ui/` | MIT. Copied into the project by design; they are yours to edit. |
+| **Radix UI primitives** | `@radix-ui/*` dependencies | MIT. |
+| **`public/logo.svg`, `logo-animated.svg`, `favicon.ico`** | This template | Original artwork drawn for Vendor Verse from the palette in `src/styles.css`. Covered by `LICENSE.md`; you may modify or replace them. |
+| **Photography / stock imagery** | — | None. The template ships no raster images at all beyond the favicon. |

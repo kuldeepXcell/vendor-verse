@@ -13,7 +13,7 @@ export const Route = createFileRoute("/vendor/messages")({
   ssr: false,
   beforeLoad: requireAuth("vendor"),
   head: () => ({
-    meta: [{ title: "Messages — Nexus Portal" }],
+    meta: [{ title: "Messages — Vendor Verse" }],
   }),
   component: VendorMessagesPage,
 });
@@ -76,7 +76,19 @@ function VendorMessagesPage() {
               successLabel="File attached"
               onFiles={(files) => uploadDocument(files[0]!.name)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+              </svg>
             </FileUploadButton>
             <Input
               placeholder="Message Procurement"
@@ -95,18 +107,33 @@ function VendorMessagesPage() {
   );
 }
 
-function Bubble({ side, name, children }: { side: "me" | "them"; name: string; children: ReactNode }) {
+function Bubble({
+  side,
+  name,
+  children,
+}: {
+  side: "me" | "them";
+  name: string;
+  children: ReactNode;
+}) {
   const mine = side === "me";
   return (
     <div className={`motion-fade-up ${mine ? "flex justify-end" : "flex justify-start"}`}>
       <div className="max-w-[75%]">
-        <div className={"mb-1 text-[11px] " + (mine ? "text-right text-muted-foreground" : "text-muted-foreground")}>
+        <div
+          className={
+            "mb-1 text-[11px] " +
+            (mine ? "text-right text-muted-foreground" : "text-muted-foreground")
+          }
+        >
           {name}
         </div>
         <div
           className={
             "rounded-2xl px-4 py-2.5 text-sm shadow-sm " +
-            (mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card text-card-foreground rounded-bl-sm border border-border")
+            (mine
+              ? "bg-primary text-primary-foreground rounded-br-sm"
+              : "bg-card text-card-foreground rounded-bl-sm border border-border")
           }
         >
           {children}

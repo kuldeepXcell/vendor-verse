@@ -25,7 +25,7 @@ export const Route = createFileRoute("/purchase-orders")({
   beforeLoad: requireAuth("admin"),
   head: () => ({
     meta: [
-      { title: "Purchase Orders — Nexus Portal" },
+      { title: "Purchase Orders — Vendor Verse" },
       {
         name: "description",
         content: "Track, approve, and manage purchase orders across all vendors.",
@@ -63,15 +63,21 @@ function POPage() {
   const inProduction = purchaseOrders.filter((po) =>
     po.status.toLowerCase().includes("production"),
   ).length;
-  const delayed = purchaseOrders.filter((po) =>
-    po.status.toLowerCase().includes("delayed"),
-  ).length;
+  const delayed = purchaseOrders.filter((po) => po.status.toLowerCase().includes("delayed")).length;
 
   function handleExport() {
     downloadCsv(
       "purchase-orders.csv",
       ["PO #", "Vendor", "Items", "Value", "Created", "Delivery", "Status"],
-      filtered.map((po) => [po.id, po.vendor, String(po.items), po.value, po.created, po.delivery, po.status]),
+      filtered.map((po) => [
+        po.id,
+        po.vendor,
+        String(po.items),
+        po.value,
+        po.created,
+        po.delivery,
+        po.status,
+      ]),
     );
     toast.success("CSV exported", { description: `${filtered.length} purchase orders` });
   }
@@ -128,7 +134,11 @@ function POPage() {
               { name: "description", label: "Description", placeholder: "Brief description" },
             ]}
             submitLabel="Create PO"
-            onSubmit={(v) => createPurchaseOrder(v as { vendor: string; value: string; delivery: string; description: string })}
+            onSubmit={(v) =>
+              createPurchaseOrder(
+                v as { vendor: string; value: string; delivery: string; description: string },
+              )
+            }
           />
         </>
       }
@@ -182,9 +192,7 @@ function POPage() {
       )}
 
       {selected.size > 0 && (
-        <div className="mb-3 text-xs text-muted-foreground">
-          {selected.size} selected
-        </div>
+        <div className="mb-3 text-xs text-muted-foreground">{selected.size} selected</div>
       )}
 
       <div className="bento-card overflow-hidden">
@@ -218,7 +226,9 @@ function POPage() {
               <TableRow
                 key={po.id}
                 className="cursor-pointer"
-                onClick={() => toast.info(`PO ${po.id}`, { description: `${po.vendor} · ${po.value}` })}
+                onClick={() =>
+                  toast.info(`PO ${po.id}`, { description: `${po.vendor} · ${po.value}` })
+                }
               >
                 <TableCell>
                   <Checkbox

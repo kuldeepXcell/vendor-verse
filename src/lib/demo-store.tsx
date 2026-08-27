@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   DEMO_VENDOR_NAME,
@@ -121,9 +114,7 @@ type DemoStoreValue = {
 const DemoStoreContext = createContext<DemoStoreValue | null>(null);
 
 function nextId(prefix: string, existing: string[]): string {
-  const nums = existing
-    .map((id) => Number(id.replace(/\D/g, "")))
-    .filter((n) => !Number.isNaN(n));
+  const nums = existing.map((id) => Number(id.replace(/\D/g, ""))).filter((n) => !Number.isNaN(n));
   const max = nums.length ? Math.max(...nums) : 1000;
   return `${prefix}${max + 1}`;
 }
@@ -160,21 +151,14 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const rejectInvoice = useCallback((id: string) => {
     setInvoices((prev) =>
       prev.map((inv) =>
-        inv.id === id
-          ? { ...inv, status: "Rejected", tone: "destructive" as const }
-          : inv,
+        inv.id === id ? { ...inv, status: "Rejected", tone: "destructive" as const } : inv,
       ),
     );
     toast.message("Invoice rejected", { description: id });
   }, []);
 
   const createPurchaseOrder = useCallback(
-    (input: {
-      vendor: string;
-      value: string;
-      delivery: string;
-      description: string;
-    }) => {
+    (input: { vendor: string; value: string; delivery: string; description: string }) => {
       const id = nextId(
         "PO-",
         purchaseOrders.map((p) => p.id),
@@ -229,7 +213,8 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       const inv: Invoice = {
         id,
         po: purchaseOrders[0]?.id ?? "PO-NEW",
-        vendor: role === "vendor" ? DEMO_VENDOR_NAME : purchaseOrders[0]?.vendor ?? DEMO_VENDOR_NAME,
+        vendor:
+          role === "vendor" ? DEMO_VENDOR_NAME : (purchaseOrders[0]?.vendor ?? DEMO_VENDOR_NAME),
         value: "$0",
         due: "TBD",
         status: role === "vendor" ? "In review" : "Awaiting approval",
@@ -243,42 +228,35 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     [invoices, purchaseOrders],
   );
 
-  const uploadDocument = useCallback(
-    (fileName: string, vendor = DEMO_VENDOR_NAME) => {
-      const doc: DocumentItem = {
-        id: `doc-${Date.now()}`,
-        name: fileName,
-        vendor,
-        group: "Compliance",
-        meta: "Uploaded just now",
-        status: "Pending review",
-        tone: "info",
-      };
-      setDocuments((prev) => [doc, ...prev]);
-      if (vendor === DEMO_VENDOR_NAME) {
-        const lower = fileName.toLowerCase();
-        if (lower.includes("coi") || lower.includes("insurance")) {
-          setOnboardingSteps((prev) =>
-            prev.map((s) => (s.label === "COI upload" ? { ...s, done: true } : s)),
-          );
-        }
-        if (lower.includes("iso")) {
-          setOnboardingSteps((prev) =>
-            prev.map((s) =>
-              s.label === "ISO 9001 certification" ? { ...s, done: true } : s,
-            ),
-          );
-        }
+  const uploadDocument = useCallback((fileName: string, vendor = DEMO_VENDOR_NAME) => {
+    const doc: DocumentItem = {
+      id: `doc-${Date.now()}`,
+      name: fileName,
+      vendor,
+      group: "Compliance",
+      meta: "Uploaded just now",
+      status: "Pending review",
+      tone: "info",
+    };
+    setDocuments((prev) => [doc, ...prev]);
+    if (vendor === DEMO_VENDOR_NAME) {
+      const lower = fileName.toLowerCase();
+      if (lower.includes("coi") || lower.includes("insurance")) {
+        setOnboardingSteps((prev) =>
+          prev.map((s) => (s.label === "COI upload" ? { ...s, done: true } : s)),
+        );
       }
-      toast.success("Document uploaded", { description: fileName });
-    },
-    [],
-  );
+      if (lower.includes("iso")) {
+        setOnboardingSteps((prev) =>
+          prev.map((s) => (s.label === "ISO 9001 certification" ? { ...s, done: true } : s)),
+        );
+      }
+    }
+    toast.success("Document uploaded", { description: fileName });
+  }, []);
 
   const completeOnboardingStep = useCallback((label: string) => {
-    setOnboardingSteps((prev) =>
-      prev.map((s) => (s.label === label ? { ...s, done: true } : s)),
-    );
+    setOnboardingSteps((prev) => prev.map((s) => (s.label === label ? { ...s, done: true } : s)));
     toast.success("Task completed", { description: label });
   }, []);
 
@@ -312,40 +290,33 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const markPaymentRunProcessed = useCallback((id: string) => {
     setPaymentRuns((prev) =>
       prev.map((run) =>
-        run.id === id
-          ? { ...run, status: "Processed", tone: "success" as const }
-          : run,
+        run.id === id ? { ...run, status: "Processed", tone: "success" as const } : run,
       ),
     );
     toast.success("Payment run processed", { description: id });
   }, []);
 
-  const sendMessage = useCallback(
-    (threadId: string, body: string, from: "admin" | "vendor") => {
-      const trimmed = body.trim();
-      if (!trimmed) return;
-      const msg: ChatMessage = {
-        id: `msg-${Date.now()}`,
-        threadId,
-        side: "me",
-        name: from === "admin" ? "You" : "You",
-        body: trimmed,
-      };
-      setChatMessages((prev) => [...prev, msg]);
-      setThreads((prev) =>
-        prev.map((t) =>
-          t.id === threadId ? { ...t, last: trimmed, time: "now", unread: false } : t,
-        ),
-      );
-      toast.success("Message sent");
-    },
-    [],
-  );
+  const sendMessage = useCallback((threadId: string, body: string, from: "admin" | "vendor") => {
+    const trimmed = body.trim();
+    if (!trimmed) return;
+    const msg: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      threadId,
+      side: "me",
+      name: from === "admin" ? "You" : "You",
+      body: trimmed,
+    };
+    setChatMessages((prev) => [...prev, msg]);
+    setThreads((prev) =>
+      prev.map((t) =>
+        t.id === threadId ? { ...t, last: trimmed, time: "now", unread: false } : t,
+      ),
+    );
+    toast.success("Message sent");
+  }, []);
 
   const markThreadRead = useCallback((threadId: string) => {
-    setThreads((prev) =>
-      prev.map((t) => (t.id === threadId ? { ...t, unread: false } : t)),
-    );
+    setThreads((prev) => prev.map((t) => (t.id === threadId ? { ...t, unread: false } : t)));
   }, []);
 
   const value = useMemo(
@@ -399,9 +370,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return (
-    <DemoStoreContext.Provider value={value}>{children}</DemoStoreContext.Provider>
-  );
+  return <DemoStoreContext.Provider value={value}>{children}</DemoStoreContext.Provider>;
 }
 
 export function useDemoStore(): DemoStoreValue {
