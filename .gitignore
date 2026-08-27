@@ -36,3 +36,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Packaged deliverables and generator scratch
+deliverables/
+.cache/
